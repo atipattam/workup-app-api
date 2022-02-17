@@ -10,6 +10,7 @@ const {
   createHash,
 } = require('../utils')
 const crypto = require('crypto')
+const { findOne } = require('../models/User')
 
 const register = async (req, res) => {
   const { email, firstName, lastName, companyName, password, role } = req.body
@@ -126,6 +127,18 @@ const login = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ user: tokenUser })
 }
+const checkLogin = async (req, res) => {
+  const { userId } = req.body
+  if (!userId) {
+    throw new CustomError.UnauthenticatedError('Missing User ID')
+  }
+  const user = await Token.findOne({ user: userId })
+  if (!user) {
+    throw new CustomError.UnauthenticatedError('Not found')
+  }
+  res.status(StatusCodes.OK).json({ msg:'login success'})
+}
+
 const logout = async (req, res) => {
   await Token.findOneAndDelete({ user: req.user.userId })
 
@@ -202,4 +215,5 @@ module.exports = {
   verifyEmail,
   forgotPassword,
   resetPassword,
+  checkLogin,
 }

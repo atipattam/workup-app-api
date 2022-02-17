@@ -10,10 +10,12 @@ const {
   verifyEmail,
   forgotPassword,
   resetPassword,
+  checkLogin
 } = require('../controllers/authController')
 
 router.post('/register', register)
 router.post('/login', login)
+router.post('/checklogin',checkLogin)
 router.delete('/logout', authenticateUser, logout)
 router.post('/verify-email', verifyEmail)
 router.post('/reset-password', resetPassword)
