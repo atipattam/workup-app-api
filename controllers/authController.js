@@ -128,11 +128,17 @@ const login = async (req, res) => {
   res.status(StatusCodes.OK).json({ user: tokenUser })
 }
 const checkLogin = async (req, res) => {
-  const { userId } = req.body
-  if (!userId) {
-    throw new CustomError.UnauthenticatedError('Missing User ID')
+  const { userId,userToken } = req.body
+  if (!userId && !userToken) {
+    throw new CustomError.UnauthenticatedError('Missing User ID OR TOKEN')
   }
-  const user = await Token.findOne({ user: userId })
+  let user = ''
+  if(userId){
+     user = await Token.findOne({ user: userId })  
+  }
+  if(userToken){
+     user = await Token.findOne({ refreshToken: userToken })
+  }
   if (!user) {
     throw new CustomError.UnauthenticatedError('Not found')
   }
