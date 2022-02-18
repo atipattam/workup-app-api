@@ -136,7 +136,7 @@ const checkLogin = async (req, res) => {
   if (!user) {
     throw new CustomError.UnauthenticatedError('Not found')
   }
-  res.status(StatusCodes.OK).json({ msg:'login success'})
+  res.status(StatusCodes.OK).json({ msg:'login success', token: user.refreshToken})
 }
 
 const logout = async (req, res) => {
