@@ -124,15 +124,7 @@ const login = async (req, res) => {
   await Token.create(userToken)
 
   attachCookiesToResponse({ res, user: tokenUser, refreshToken })
-  res.header('Access-Control-Allow-Credentials', true)
-  res.header(
-    'Access-Control-Allow-Methods',
-    'GET,PUT,POST,DELETE,UPDATE,OPTIONS'
-  )
-  res.header(
-    'Access-Control-Allow-Headers',
-    'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
-  )
+
   res.status(StatusCodes.OK).json({ user: tokenUser })
 }
 const checkLogin = async (req, res) => {
