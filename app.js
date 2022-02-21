@@ -17,7 +17,7 @@ const authRouter = require('./routes/authRoutes')
 const notFoundMiddleware = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 
-app.use(cors({ credentials: true, origin: true }))
+app.use(cors({ credentials: true}))
 
 app.use(express.json())
 app.use(cookieParser(process.env.JWT_SECRET))
