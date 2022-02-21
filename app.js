@@ -22,6 +22,7 @@ app.use(
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
     origin: ['http://localhost:3000'],
+    exposedHeaders: ['set-cookie'],
   })
 )
 
