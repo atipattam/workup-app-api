@@ -190,6 +190,14 @@ const forgotPassword = async (req, res) => {
     .status(StatusCodes.OK)
     .json({ msg: 'Please check your email for reset password link' })
 }
+const getCookie = async (req,res) =>{
+  res.cookie('name','ak',{
+    sameSite: 'strict',
+    path: '/',
+    expires: new Date(new Date().getTime()+100 * 1000),
+    httpOnly:true
+  })
+}
 const resetPassword = async (req, res) => {
   const { token, email, password } = req.body
   if (!token || !email || !password) {
@@ -222,4 +230,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   checkLogin,
+  getCookie,
 }
