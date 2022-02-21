@@ -16,7 +16,7 @@ const {
 
 router.post('/register', register)
 router.post('/login', login)
-router.get('getcookie',getCookie)
+router.get('/getcookie',getCookie)
 router.post('/checklogin',checkLogin)
 router.delete('/logout', authenticateUser, logout)
 router.post('/verify-email', verifyEmail)
