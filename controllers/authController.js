@@ -124,25 +124,35 @@ const login = async (req, res) => {
   await Token.create(userToken)
 
   attachCookiesToResponse({ res, user: tokenUser, refreshToken })
-
+  res.header('Access-Control-Allow-Credentials', true)
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET,PUT,POST,DELETE,UPDATE,OPTIONS'
+  )
+  res.header(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
+  )
   res.status(StatusCodes.OK).json({ user: tokenUser })
 }
 const checkLogin = async (req, res) => {
-  const { userId,userToken } = req.body
+  const { userId, userToken } = req.body
   if (!userId && !userToken) {
     throw new CustomError.UnauthenticatedError('Missing User ID OR TOKEN')
   }
   let user = ''
-  if(userId){
-     user = await Token.findOne({ user: userId })  
+  if (userId) {
+    user = await Token.findOne({ user: userId })
   }
-  if(userToken){
-     user = await Token.findOne({ refreshToken: userToken })
+  if (userToken) {
+    user = await Token.findOne({ refreshToken: userToken })
   }
   if (!user) {
     throw new CustomError.UnauthenticatedError('Not found')
   }
-  res.status(StatusCodes.OK).json({ msg:'login success', token: user.refreshToken, userId:user.user})
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: 'login success', token: user.refreshToken, userId: user.user })
 }
 
 const logout = async (req, res) => {
@@ -190,14 +200,7 @@ const forgotPassword = async (req, res) => {
     .status(StatusCodes.OK)
     .json({ msg: 'Please check your email for reset password link' })
 }
-const getCookie = async (req,res) =>{
-  res.cookie('name','ak',{
-    sameSite: 'strict',
-    path: '/',
-    expires: new Date(new Date().getTime()+100 * 1000),
-    httpOnly:true
-  })
-}
+
 const resetPassword = async (req, res) => {
   const { token, email, password } = req.body
   if (!token || !email || !password) {
@@ -230,5 +233,4 @@ module.exports = {
   forgotPassword,
   resetPassword,
   checkLogin,
-  getCookie,
 }
