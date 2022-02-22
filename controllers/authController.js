@@ -113,7 +113,6 @@ const login = async (req, res) => {
     const myToken = { ...tokenUser, refreshToken }
     const generateToken = createJWT({ payload: myToken })
     const data = { ...tokenUser, userToken: generateToken }
-    console.log('user', generateToken)
 
     res.status(StatusCodes.OK).json({ user: data })
     return
@@ -139,7 +138,7 @@ const checkLogin = async (req, res) => {
 
 const logout = async (req, res) => {
   await Token.findOneAndDelete({ user: req.user.userId })
-  
+
   res.status(StatusCodes.OK).json({ msg: 'user logged out!' })
 }
 

@@ -3,7 +3,6 @@ const { isTokenValid, createJWT } = require('../utils')
 const Token = require('../models/Token')
 
 const authenticateUser = async (req, res, next) => {
-  console.log(req.headers)
   if (!req.headers.authorization) {
     throw new CustomError.UnauthenticatedError('Missing Token')
   }
