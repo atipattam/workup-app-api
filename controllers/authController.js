@@ -131,9 +131,10 @@ const login = async (req, res) => {
 
 const checkLogin = async (req, res) => {
   const { userId, refreshToken } = req.user
-  res
-    .status(StatusCodes.OK)
-    .json({ msg: 'login success', userToken: refreshToken, userId: userId })
+  res.status(StatusCodes.OK).json({
+    data: { userToken: refreshToken, userId: userId },
+    msg: 'login Success',
+  })
 }
 
 const logout = async (req, res) => {

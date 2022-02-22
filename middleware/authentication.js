@@ -17,7 +17,8 @@ const authenticateUser = async (req, res, next) => {
       throw new CustomError.UnauthenticatedError('Authentication Invalid')
     }
     const userData = createJWT({ payload })
-    req.user = userData
+    const data = { userId: payload.userId, refreshToken: userDat }
+    req.user = data
     next()
   } catch (error) {
     console.log(error)
