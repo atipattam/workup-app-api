@@ -1,9 +1,9 @@
 const User = require('../models/User')
+const Profile = require('../models/UserProfile')
 const Token = require('../models/Token')
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
 const {
-  attachCookiesToResponse,
   createTokenUser,
   sendVerificationEmail,
   sendResetPasswordEmail,
@@ -11,7 +11,6 @@ const {
   createJWT,
 } = require('../utils')
 const crypto = require('crypto')
-const { findOne } = require('../models/User')
 
 const register = async (req, res) => {
   const { email, firstName, lastName, companyName, password, role } = req.body
@@ -63,6 +62,7 @@ const verifyEmail = async (req, res) => {
   const { verificationToken, email } = req.body
   const user = await User.findOne({ email })
 
+  const { firstName, lastName, role } = user
   if (!user) {
     throw new CustomError.UnauthenticatedError('Verification Failed')
   }
@@ -75,7 +75,23 @@ const verifyEmail = async (req, res) => {
   user.verificationToken = ''
 
   await user.save()
-
+  if (role === 'candidate') {
+    await Profile.create({
+      firstName,
+      lastName,
+      email,
+      userId: user._id,
+      education: [{}],
+      birthDate: new Date(),
+      pastWork: [],
+      education: [{}],
+      isUpdate: false,
+      address: '',
+      imgProfile: '',
+      pastWorkImg: [],
+      interestedJob: [],
+    })
+  }
   res.status(StatusCodes.OK).json({ msg: 'Email Verified' })
 }
 
@@ -119,7 +135,7 @@ const login = async (req, res) => {
   }
 
   refreshToken = crypto.randomBytes(40).toString('hex')
-  const generateToken = createJWT({ payload: { ...userToken, refreshToken } })
+  const generateToken = createJWT({ payload: { ...tokenUser, refreshToken } })
   const userAgent = req.headers['user-agent']
   const ip = req.ip
   const userToken = { refreshToken, ip, userAgent, user: user._id }
