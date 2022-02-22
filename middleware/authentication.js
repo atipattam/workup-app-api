@@ -1,37 +1,28 @@
 const CustomError = require('../errors')
-const { isTokenValid } = require('../utils')
+const { isTokenValid, createJWT } = require('../utils')
 const Token = require('../models/Token')
-const { attachCookiesToResponse } = require('../utils')
-const authenticateUser = async (req, res, next) => {
-  const { refreshToken, accessToken } = req.signedCookies
-  try {
-    if (accessToken) {
-      const payload = isTokenValid(accessToken)
-      req.user = payload.user
-      return next()
-    }
-    const payload = isTokenValid(refreshToken)
 
+const authenticateUser = async (req, res, next) => {
+  console.log(req.headers)
+  if (!req.headers.authorization) {
+    throw new CustomError.UnauthenticatedError('Missing Token')
+  }
+  const refreshToken = req.headers.authorization
+  try {
+    const payload = isTokenValid(refreshToken)
     const existingToken = await Token.findOne({
-      user: payload.user.userId,
+      user: payload.userId,
       refreshToken: payload.refreshToken,
     })
-
     if (!existingToken || !existingToken?.isValid) {
       throw new CustomError.UnauthenticatedError('Authentication Invalid')
     }
-
-    attachCookiesToResponse({
-      res,
-      user: payload.user,
-      refreshToken: existingToken.refreshToken,
-    })
-
-    req.user = payload.user
+    const userData = createJWT({ payload })
+    req.user = userData
     next()
   } catch (error) {
     console.log(error)
-    throw new CustomError.UnauthenticatedError(' Catch Authentication Invalid')
+    throw new CustomError.UnauthenticatedError('Not found with authentication')
   }
 }
 

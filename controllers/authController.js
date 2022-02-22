@@ -8,6 +8,7 @@ const {
   sendVerificationEmail,
   sendResetPasswordEmail,
   createHash,
+  createJWT,
 } = require('../utils')
 const crypto = require('crypto')
 const { findOne } = require('../models/User')
@@ -45,7 +46,6 @@ const register = async (req, res) => {
     verificationToken,
   })
   const origin = 'http://localhost:3000'
-  // const newOrigin = 'https://react-node-user-workflow-front-end.netlify.app';
 
   await sendVerificationEmail({
     name: user.companyName,
@@ -99,7 +99,6 @@ const login = async (req, res) => {
     throw new CustomError.UnauthenticatedError('Please verify your email')
   }
   const tokenUser = createTokenUser(user)
-
   // create refresh token
   let refreshToken = ''
   // check for existing token
@@ -111,40 +110,31 @@ const login = async (req, res) => {
       throw new CustomError.UnauthenticatedError('Invalid Credentials')
     }
     refreshToken = existingToken.refreshToken
-    attachCookiesToResponse({ res, user: tokenUser, refreshToken })
-    res.status(StatusCodes.OK).json({ user: tokenUser })
+    const myToken = { ...tokenUser, refreshToken }
+    const generateToken = createJWT({ payload: myToken })
+    const data = { ...tokenUser, userToken: generateToken }
+    console.log('user', generateToken)
+
+    res.status(StatusCodes.OK).json({ user: data })
     return
   }
 
   refreshToken = crypto.randomBytes(40).toString('hex')
+  const generateToken = createJWT({ payload: { ...userToken, refreshToken } })
   const userAgent = req.headers['user-agent']
   const ip = req.ip
   const userToken = { refreshToken, ip, userAgent, user: user._id }
 
   await Token.create(userToken)
 
-  attachCookiesToResponse({ res, user: tokenUser, refreshToken })
-
-  res.status(StatusCodes.OK).json({ user: tokenUser })
+  res.status(StatusCodes.OK).json({ user: { ...tokenUser, generateToken } })
 }
+
 const checkLogin = async (req, res) => {
-  const { userId, userToken } = req.body
-  if (!userId && !userToken) {
-    throw new CustomError.UnauthenticatedError('Missing User ID OR TOKEN')
-  }
-  let user = ''
-  if (userId) {
-    user = await Token.findOne({ user: userId })
-  }
-  if (userToken) {
-    user = await Token.findOne({ refreshToken: userToken })
-  }
-  if (!user) {
-    throw new CustomError.UnauthenticatedError('Not found')
-  }
+  const { userId, refreshToken } = req.user
   res
     .status(StatusCodes.OK)
-    .json({ msg: 'login success', token: user.refreshToken, userId: user.user })
+    .json({ msg: 'login success', userToken: refreshToken, userId: userId })
 }
 
 const logout = async (req, res) => {
