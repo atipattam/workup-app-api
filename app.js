@@ -18,6 +18,7 @@ const userProfile = require('./routes/userProfileRoutes')
 const notFoundMiddleware = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 app.set('trust proxy', 1)
+
 app.use(
   session({
     secret: 'supersecret',
@@ -29,7 +30,7 @@ app.use(
     resave: false,
   })
 )
-app.use(cors())
+app.use(cors({ credentials: true }))
 // credentials: true,
 // allowedHeaders: ['Content-Type', 'Authorization'],
 // origin: ['http://localhost:3000'],
