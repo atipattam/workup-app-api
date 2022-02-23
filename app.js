@@ -7,7 +7,7 @@ const app = express()
 // rest of the packages
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
-const session = require('express-session')
+// const session = require('express-session')
 // database
 const connectDB = require('./db/connect')
 
