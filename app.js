@@ -30,7 +30,7 @@ app.set('trust proxy', 1)
 //     resave: false,
 //   })
 // )
-app.use(cors({ credentials: true }))
+app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }))
 // credentials: true,
 // allowedHeaders: ['Content-Type', 'Authorization'],
 // origin: ['http://localhost:3000'],
