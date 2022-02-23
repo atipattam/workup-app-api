@@ -16,7 +16,7 @@ const {
 } = require('../controllers/authController')
 
 router.post('/register', register)
-router.post('/login', loginV2)
+router.post('/login', login)
 router.get('/checklogin', authenticateUser, checkLogin)
 router.delete('/logout', authenticateUser, logout)
 router.post('/verify-email', verifyEmail)
