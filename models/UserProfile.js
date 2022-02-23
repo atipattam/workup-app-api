@@ -3,6 +3,7 @@ const validator = require('validator')
 
 const ProfileSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
+  emailAuth: { type: String },
   firstName: {
     type: String,
     minlength: 3,
