@@ -19,7 +19,6 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
     signed: true,
     expires: new Date(Date.now() + oneDay),
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    domain: 'http://localhost:3000',
   })
   res.cookie('refreshToken', refreshTokenJWT, {
     httpOnly: true,
@@ -27,7 +26,6 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
     signed: true,
     expires: new Date(Date.now() + longerExp),
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    domain: 'http://localhost:3000',
   })
 }
 
