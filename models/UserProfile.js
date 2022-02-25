@@ -44,6 +44,12 @@ const ProfileSchema = new mongoose.Schema({
   pastWorkImg: {
     type: [],
   },
+  marital: {
+    type: String,
+  },
+  gender: {
+    type: String,
+  },
 })
 
 module.exports = mongoose.model('UserProfile', ProfileSchema)

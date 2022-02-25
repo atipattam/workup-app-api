@@ -23,6 +23,9 @@ const register = async (req, res) => {
 
   const verificationToken = crypto.randomBytes(40).toString('hex')
   let userData = {}
+  if (!role) {
+    throw new CustomError.BadRequestError('Please provide role')
+  }
   if (role === 'candidate') {
     if (!firstName || !lastName) {
       throw new CustomError.BadRequestError('Please provide name and lastname')
@@ -81,7 +84,7 @@ const verifyEmail = async (req, res) => {
       email,
       userId: user._id,
       education: [{}],
-      birthDate: new Date(),
+      birthDate: null,
       pastWork: [],
       education: [{}],
       isUpdate: false,
@@ -89,6 +92,8 @@ const verifyEmail = async (req, res) => {
       imgProfile: '',
       pastWorkImg: [],
       interestedJob: [],
+      gender: '',
+      marital: '',
       emailAuth: email,
     })
   }
@@ -215,50 +220,6 @@ const resetPassword = async (req, res) => {
   res.send('reset password')
 }
 
-const loginV2 = async (req, res) => {
-  const { email, password } = req.body
-
-  if (!email || !password) {
-    throw new CustomError.BadRequestError('Please provide email and password')
-  }
-  const user = await User.findOne({ email })
-
-  if (!user) {
-    throw new CustomError.UnauthenticatedError('Invalid Credentials')
-  }
-  const isPasswordCorrect = await user.comparePassword(password)
-  if (!isPasswordCorrect) {
-    throw new CustomError.UnauthenticatedError('Invalid Credentials')
-  }
-  if (!user.isVerified) {
-    throw new CustomError.UnauthenticatedError('Please verify your email')
-  }
-  const tokenUser = createTokenUser(user)
-
-  let refreshToken = ''
-
-  const existingToken = await Token.findOne({ user: user._id })
-  if (existingToken) {
-    const { isValid } = existingToken
-    if (!isValid) {
-      throw new CustomError.UnauthenticatedError('Invalid Credentials')
-    }
-    refreshToken = existingToken.refreshToken
-    attachCookiesToResponse({ res, user: tokenUser })
-
-    res.status(StatusCodes.OK).json({ user: tokenUser, refreshToken })
-    return
-  }
-  refreshToken = crypto.randomBytes(40).toString('hex')
-  const userAgent = req.headers['user-agent']
-  const ip = req.ip
-  const userToken = { refreshToken, ip, userAgent, user: user._id }
-
-  await Token.create(userToken)
-  attachCookiesToResponse({ res, user: tokenUser })
-
-  res.status(StatusCodes.OK).json({ user: tokenUser, refreshToken })
-}
 module.exports = {
   register,
   login,
@@ -267,5 +228,4 @@ module.exports = {
   forgotPassword,
   resetPassword,
   checkLogin,
-  loginV2,
 }

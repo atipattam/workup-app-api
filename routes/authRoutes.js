@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 
 const { authenticateUser } = require('../middleware/authentication')
-const { authenticateUserV2 } = require('../middleware/authentication2')
 
 const {
   register,
