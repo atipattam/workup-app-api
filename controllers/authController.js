@@ -151,9 +151,9 @@ const login = async (req, res) => {
 }
 
 const checkLogin = async (req, res) => {
-  const { userId, refreshToken } = req.user
+  const { userId, refreshToken, userType } = req.user
   res.status(StatusCodes.OK).json({
-    data: { userToken: refreshToken, userId: userId },
+    data: { userToken: refreshToken, userId: userId, userType },
     msg: 'login Success',
   })
 }
