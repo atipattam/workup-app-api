@@ -11,7 +11,6 @@ const {
   forgotPassword,
   resetPassword,
   checkLogin,
-  loginV2,
 } = require('../controllers/authController')
 
 router.post('/register', register)

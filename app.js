@@ -7,6 +7,13 @@ const app = express()
 // rest of the packages
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const fileUpload = require('express-fileupload')
+const cloudinary = require('cloudinary').v2
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+})
 // const session = require('express-session')
 // database
 const connectDB = require('./db/connect')
@@ -14,6 +21,7 @@ const connectDB = require('./db/connect')
 //  routers
 const authRouter = require('./routes/authRoutes')
 const userProfile = require('./routes/userProfileRoutes')
+const uploadRoute = require('./routes/uploadRoutes')
 // middleware
 const notFoundMiddleware = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
@@ -37,12 +45,15 @@ app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }))
 // origin: ['http://localhost:3000'],
 
 app.use(express.json())
+app.use(fileUpload({ useTempFiles: true }))
 app.use(cookieParser(process.env.JWT_SECRET))
 
 // app.use(express.static('./public'))
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/userProfile', userProfile)
+app.use('/api/v1', uploadRoute)
+
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
