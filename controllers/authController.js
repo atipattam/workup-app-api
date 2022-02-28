@@ -147,7 +147,9 @@ const login = async (req, res) => {
 
   await Token.create(userToken)
 
-  res.status(StatusCodes.OK).json({ user: { ...tokenUser, generateToken } })
+  res
+    .status(StatusCodes.OK)
+    .json({ user: { ...tokenUser, userToken: generateToken } })
 }
 
 const checkLogin = async (req, res) => {
