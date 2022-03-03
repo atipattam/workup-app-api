@@ -1,7 +1,9 @@
 const Profile = require('../models/UserProfile')
+const CompanyProfile = require('../models/CompanyProfile')
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
 const { checkTypeBody } = require('../utils/checkTypeBody')
+const User = require('../models/User')
 
 const getUserProfile = async (req, res) => {
   const { userId } = req.user
@@ -16,11 +18,28 @@ const getUserProfile = async (req, res) => {
 
 const getUserByEmail = async (req, res) => {
   const { email } = req.body
+  const user = User.findOne({ email })
   if (!email) {
     throw new CustomError.BadRequestError('Please provide email')
   }
-  const profileData = await Profile.findOne({ emailAuth: email })
-  if (!profileData) {
+  const role = user.role
+  let data = ''
+  if (role === 'candidate') {
+    const profileData = await Profile.findOne({ emailAuth: email })
+    if (!profileData) {
+      throw new CustomError.BadRequestError('Not found with this account')
+    }
+    data = profileData.imgProfile
+  }
+
+  if (role === 'company') {
+    const profileData = await CompanyProfile.findOne({ emailAuth: email })
+    if (!profileData) {
+      throw new CustomError.BadRequestError('Not found with this account')
+    }
+    data = profileData.imgProfile
+  }
+  if (!data) {
     throw new CustomError.BadRequestError('Not found with this account')
   }
   res

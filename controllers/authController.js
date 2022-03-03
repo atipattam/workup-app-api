@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const Profile = require('../models/UserProfile')
+const CompanyProfile = require('../models/CompanyProfile')
 const Token = require('../models/Token')
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
@@ -64,7 +65,7 @@ const verifyEmail = async (req, res) => {
   const { verificationToken, email } = req.body
   const user = await User.findOne({ email })
 
-  const { firstName, lastName, role } = user
+  const { firstName, lastName, role, companyName } = user
   if (!user) {
     throw new CustomError.UnauthenticatedError('Verification Failed')
   }
@@ -86,7 +87,6 @@ const verifyEmail = async (req, res) => {
       education: [{}],
       birthDate: null,
       pastWork: [],
-      education: [{}],
       isUpdate: false,
       address: '',
       imgProfile: '',
@@ -95,6 +95,22 @@ const verifyEmail = async (req, res) => {
       gender: '',
       marital: '',
       emailAuth: email,
+    })
+  }
+  if (role === 'company') {
+    await CompanyProfile.create({
+      companyName,
+      email,
+      userId: user._id,
+      emailAuth: email,
+      imgProfile: '',
+      address: '',
+      isUpdate: false,
+      welfare: [],
+      imgAbout: [],
+      phoneNumber: '',
+      detail: '',
+      travel: [],
     })
   }
   res.status(StatusCodes.OK).json({ msg: 'Email Verified' })
