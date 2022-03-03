@@ -4,7 +4,7 @@ const { checkTypeBody } = require('../utils/checkTypeBody')
 const { StatusCodes } = require('http-status-codes')
 
 const getCompanyProfile = async (req, res) => {
-  const { userId } = req.userId
+  const { userId } = req.user
   const profile = await Company.findOne({ userId })
   if (!profile) {
     throw new CustomError.BadRequestError('Not found with this account')
