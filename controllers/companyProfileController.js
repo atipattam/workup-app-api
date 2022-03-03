@@ -21,6 +21,7 @@ const updateCompanyProfile = async (req, res) => {
 
   const schema = {
     companyName: 'string',
+    companyDetail: 'string',
     email: 'string',
     detail: 'string',
     welfare: 'array',
