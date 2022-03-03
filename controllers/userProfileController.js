@@ -29,7 +29,7 @@ const getUserByEmail = async (req, res) => {
     if (!profileData) {
       throw new CustomError.BadRequestError('Not found with this account')
     }
-    data = profileData.imgProfile
+    data = {imgProfile: profileData.imgProfile, name: profileData.firstName}
   }
 
   if (role === 'company') {
@@ -37,7 +37,7 @@ const getUserByEmail = async (req, res) => {
     if (!profileData) {
       throw new CustomError.BadRequestError('Not found with this account')
     }
-    data = profileData.imgProfile
+    data = { imgProfile: profileData.imgProfile, name: profileData.companyName }
   }
   if (!data) {
     throw new CustomError.BadRequestError('Not found with this account')
