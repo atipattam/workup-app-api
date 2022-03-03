@@ -18,7 +18,7 @@ const getUserProfile = async (req, res) => {
 
 const getUserByEmail = async (req, res) => {
   const { email } = req.body
-  const user = User.findOne({ email })
+  const user = await User.findOne({ email })
   if (!email) {
     throw new CustomError.BadRequestError('Please provide email')
   }
@@ -44,7 +44,7 @@ const getUserByEmail = async (req, res) => {
   }
   res
     .status(StatusCodes.OK)
-    .json({ msg: 'Get complete', data: profileData.imgProfile })
+    .json({ msg: 'Get complete', data})
 }
 const updateUserProfile = async (req, res) => {
   const { userId } = req.user
