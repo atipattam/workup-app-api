@@ -41,6 +41,9 @@ const CompanyProfileSchema = new mongoose.Schema({
   },
   imgAbout:{
     type: [],
+  },
+  imgCover:{
+    type: String
   }
 })
 

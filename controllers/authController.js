@@ -111,6 +111,7 @@ const verifyEmail = async (req, res) => {
       phoneNumber: '',
       detail: '',
       travel: [],
+      imgCover:''
     })
   }
   res.status(StatusCodes.OK).json({ msg: 'Email Verified' })
