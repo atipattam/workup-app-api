@@ -13,7 +13,7 @@ const getCompanyProfile = async (req, res) => {
 }
 
 const updateCompanyProfile = async (req, res) => {
-  const { userId } = req.userId
+  const { userId } = req.user
   const allData = req.body
   if (!allData) {
     throw new CustomError.BadRequestError('Please send your data')
