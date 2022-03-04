@@ -2,7 +2,7 @@ const { checkTypeBody, requireData } = require('../utils/checkTypeBody')
 const Announce = require('../models/Announcement')
 const CustomError = require('../errors')
 const { StatusCodes } = require('http-status-codes')
-
+const _isEmpty = require('lodash/isEmpty')
 const schema = {
   jobType: 'string',
   position: 'string',
@@ -31,11 +31,29 @@ const createAnnouncement = async (req, res) => {
 const getAllAnnouncementCompany = async (req, res) => {
   const { userId } = req.user
   const myAnnounce = await Announce.find({ companyId: userId })
+
+  if (_isEmpty(myAnnounce)) {
+    throw new CustomError.BadRequestError('This Company dont have announcement')
+  }
   res.status(StatusCodes.OK).json({
     msg: 'get all complete',
     data: myAnnounce,
   })
 }
 
-
-module.exports = { createAnnouncement, getAllAnnouncementCompany }
+const getAnnounceById = async (req, res) => {
+  const announceId = req.params.id
+  const announce = await Announce.findOne({ _id: announceId })
+  if (!announce) {
+    throw new CustomError.BadRequestError('Not found with announce id')
+  }
+  res.status(StatusCodes.OK).json({
+    msg: 'get announce complete',
+    data: announce,
+  })
+}
+module.exports = {
+  createAnnouncement,
+  getAllAnnouncementCompany,
+  getAnnounceById,
+}
