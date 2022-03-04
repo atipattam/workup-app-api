@@ -2,6 +2,7 @@ const _isDate = require('lodash/isDate')
 const _isArray = require('lodash/isArray')
 const _isEmpty = require('lodash/isEmpty')
 const _join = require('lodash/join')
+const _xor = require('lodash/xor')
 const CustomError = require('../errors')
 const checkTypeBody = (data, type) => {
   const arr = Object.keys(data)
@@ -27,4 +28,15 @@ const checkTypeBody = (data, type) => {
   }
   return true
 }
-module.exports = { checkTypeBody }
+
+const requireData = (data, schema) => {
+  const arr = Object.keys(schema)
+  const dataArr = Object.keys(data)
+
+  const messageArr = _xor(arr, dataArr)
+  if (!_isEmpty(messageArr)) {
+    const message = _join(messageArr, ', ')
+    throw new CustomError.BadRequestError(`Please provide field ${message}`)
+  }
+}
+module.exports = { checkTypeBody, requireData }
