@@ -1,6 +1,6 @@
 const { checkTypeBody, requireData } = require('../utils/checkTypeBody')
 const Announce = require('../models/Announcement')
-const CompanyProfile = require('../models/CompanyProfile') 
+const CompanyProfile = require('../models/CompanyProfile')
 const CustomError = require('../errors')
 const { StatusCodes } = require('http-status-codes')
 const _isEmpty = require('lodash/isEmpty')
@@ -18,7 +18,7 @@ const schema = {
 const createAnnouncement = async (req, res) => {
   const { userId } = req.user
   const allData = req.body
-  const companyProfile = await CompanyProfile.findOne({userId})
+  const companyProfile = await CompanyProfile.findOne({ userId })
 
   await requireData(allData, schema)
   const check = checkTypeBody(allData, schema)
@@ -47,13 +47,22 @@ const getAllAnnouncementCompany = async (req, res) => {
 
 const getAnnounceById = async (req, res) => {
   const announceId = req.params.id
+
   const announce = await Announce.findOne({ _id: announceId })
+  const companyProfile = await CompanyProfile.findOne({
+    _id: announce.companyId,
+  })
+
   if (!announce) {
     throw new CustomError.BadRequestError('Not found with announce id')
   }
   res.status(StatusCodes.OK).json({
     msg: 'get announce complete',
-    data: announce,
+    data: {
+      announce,
+      companyName: companyProfile.companyName,
+      imgProfile: companyProfile.imgProfile,
+    },
   })
 }
 module.exports = {
