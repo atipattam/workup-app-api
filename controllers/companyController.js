@@ -17,6 +17,7 @@ const getCompanyByid = async(req,res) =>{
     address: companyProfile.address,
     imgCover:companyProfile.imgCover,
     travel:companyProfile.travel,
+    imgAbout:companyProfile.imgAbout,
     announce:announce
   }
     res.status(StatusCodes.OK).json({
