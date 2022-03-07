@@ -1,5 +1,6 @@
 const { checkTypeBody, requireData } = require('../utils/checkTypeBody')
 const Announce = require('../models/Announcement')
+const CompanyProfile = require('../models/CompanyProfile') 
 const CustomError = require('../errors')
 const { StatusCodes } = require('http-status-codes')
 const _isEmpty = require('lodash/isEmpty')
@@ -17,12 +18,14 @@ const schema = {
 const createAnnouncement = async (req, res) => {
   const { userId } = req.user
   const allData = req.body
+  const companyProfile = await CompanyProfile.findOne({userId})
+
   await requireData(allData, schema)
   const check = checkTypeBody(allData, schema)
   if (!check) {
     throw new CustomError.BadRequestError('Something Wrong')
   }
-  await Announce.create({ companyId: userId, ...allData })
+  await Announce.create({ companyId: companyProfile._id, ...allData })
   res.status(StatusCodes.CREATED).json({
     msg: 'Create Announcement Success',
   })
@@ -30,7 +33,8 @@ const createAnnouncement = async (req, res) => {
 
 const getAllAnnouncementCompany = async (req, res) => {
   const { userId } = req.user
-  const myAnnounce = await Announce.find({ companyId: userId })
+  const companyProfile = await CompanyProfile.findOne({ userId })
+  const myAnnounce = await Announce.find({ companyId: companyProfile._id })
 
   if (_isEmpty(myAnnounce)) {
     throw new CustomError.BadRequestError('This Company dont have announcement')
