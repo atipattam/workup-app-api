@@ -39,12 +39,15 @@ const CompanyProfileSchema = new mongoose.Schema({
   imgProfile: {
     type: String,
   },
-  imgAbout:{
+  imgAbout: {
     type: [],
   },
-  imgCover:{
-    type: String
-  }
+  imgCover: {
+    type: String,
+  },
+  announceText: {
+    type: String,
+  },
 })
 
 module.exports = mongoose.model('CompanyProfile', CompanyProfileSchema)

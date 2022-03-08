@@ -4,9 +4,10 @@ const router = express.Router()
 const { authenticateUser } = require('../middleware/authentication')
 
 const {
- getCompanyByid
+ getCompanyByid, getAllCompanyAndJob
 } = require('../controllers/companyController')
 
+router.route('/').get(getAllCompanyAndJob)
 router
   .route('/:id')
   .get(getCompanyByid)
