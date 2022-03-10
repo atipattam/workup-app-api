@@ -52,7 +52,11 @@ const getAnnounceById = async (req, res) => {
   const companyProfile = await CompanyProfile.findOne({
     _id: announce.companyId,
   })
-
+ const otherAnnounce = await Announce.find({
+   _id: { $ne: announceId },
+ })
+   .sort({ updatedAt: -1 })
+   .limit(4)
   if (!announce) {
     throw new CustomError.BadRequestError('Not found with announce id')
   }
@@ -60,6 +64,7 @@ const getAnnounceById = async (req, res) => {
     msg: 'get announce complete',
     data: {
       announce,
+      otherAnnounce,
       companyName: companyProfile.companyName,
       imgProfile: companyProfile.imgProfile,
     },
