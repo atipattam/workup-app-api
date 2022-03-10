@@ -63,7 +63,11 @@ const updateUserProfile = async (req, res) => {
     imgProfile: 'string',
     gender: 'string',
     marital: 'string',
-  }
+    city: 'string',
+    responsible: 'string',
+    phone: 'string',
+    aboutMe:'string',
+    }
   const check = checkTypeBody(allData, schema)
   if (!check) {
     throw new CustomError.BadRequestError('something wrong')

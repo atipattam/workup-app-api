@@ -95,6 +95,10 @@ const verifyEmail = async (req, res) => {
       gender: '',
       marital: '',
       emailAuth: email,
+      phone:'',
+      responsible:'',
+      aboutMe:'',
+      city:'',
     })
   }
   if (role === 'company') {
