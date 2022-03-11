@@ -18,7 +18,7 @@ const uploadImage = async (req, res) => {
 }
 
 const uploadPDF = async (req,res) =>{
-  const pdfReq = req.files.pdf
+  const pdfReq = req.files.file
   const myArr = []
   if(_isEmpty(pdfReq)){
     throw new CustomError.BadRequestError('Please Upload PDF FILE')
