@@ -32,6 +32,7 @@ const updateCompanyProfile = async (req, res) => {
     imgProfile: 'string',
     imgAbout: 'array',
     imgCover: 'string',
+
   }
   const check = checkTypeBody(allData, schema)
   if (!check) {

@@ -43,7 +43,7 @@ const getAllCompanyAndJob = async (req, res) => {
     myArr.push(myData)
   }
   for (let data of announce) {
-    const company = await CompanyProfile.findOne({ companyId: data.companyId })
+    const company = await CompanyProfile.findOne({ _id: data.companyId })
     const myData = {
       companyName: company.companyName,
       imgProfile: company.imgProfile,
