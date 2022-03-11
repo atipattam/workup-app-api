@@ -3,6 +3,7 @@ const CustomError = require('../errors')
 const PDFDoc = require('pdfkit')
 const cloudinary = require('cloudinary').v2
 const fs = require('fs')
+const _isEmpty = require('lodash/isEmpty')
 
 const uploadImage = async (req, res) => {
   const result = await cloudinary.uploader.upload(
@@ -17,15 +18,24 @@ const uploadImage = async (req, res) => {
 }
 
 const uploadPDF = async (req,res) =>{
-   const result = await cloudinary.uploader.upload(
-    req.files.pdf.tempFilePath,
-    {
-      use_filename: true,
-      folder: 'workup-upload-pdf',
-    }
-  )
-  fs.unlinkSync(req.files.pdf.tempFilePath)
-  return res.status(StatusCodes.OK).json({ file: { src: result.secure_url } })
+  const pdfReq = req.files.pdf
+  const myArr = []
+  if(_isEmpty(pdfReq)){
+    throw new CustomError.BadRequestError('Please Upload PDF FILE')
+  }
+  for(let data of pdfReq){
+     const result = await cloudinary.uploader.upload(
+     data.tempFilePath,
+      {
+        use_filename: true,
+        folder: 'workup-upload-pdf',
+      }
+    )
+    fs.unlinkSync(data.tempFilePath)
+      myArr.push(result.secure_url)
+  }
+
+  return res.status(StatusCodes.OK).json({ file: myArr})
 }
 
 module.exports = { uploadImage, uploadPDF }
