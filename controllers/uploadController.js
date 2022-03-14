@@ -20,22 +20,33 @@ const uploadImage = async (req, res) => {
 const uploadPDF = async (req,res) =>{
   const pdfReq = req.files.file
   const myArr = []
-  if(_isEmpty(pdfReq)){
-    throw new CustomError.BadRequestError('Please Upload PDF FILE')
-  }
-  for(let data of pdfReq){
-     const result = await cloudinary.uploader.upload(
-     data.tempFilePath,
-      {
-        use_filename: true,
-        folder: 'workup-upload-pdf',
-      }
-    )
-    fs.unlinkSync(data.tempFilePath)
-      myArr.push(result.secure_url)
-  }
 
-  return res.status(StatusCodes.OK).json({ file: myArr})
+  const result = await cloudinary.uploader.upload(
+    pdfReq.tempFilePath,
+    {
+      use_filename: true,
+      folder: 'workup-upload-pdf',
+    }
+  )
+  fs.unlinkSync(req.files.file.tempFilePath)
+  return res.status(StatusCodes.OK).json({ file: { src: result.secure_url } })
 }
+  // if(_isEmpty(pdfReq)){
+  //   throw new CustomError.BadRequestError('Please Upload PDF FILE')
+  // }
+  // for(let data of pdfReq){
+  //    const result = await cloudinary.uploader.upload(
+  //    data.tempFilePath,
+  //     {
+  //       use_filename: true,
+  //       folder: 'workup-upload-pdf',
+  //     }
+  //   )
+  //   fs.unlinkSync(data.tempFilePath)
+  //     myArr.push(result.secure_url)
+  // }
+
+  // return res.status(StatusCodes.OK).json({ file: myArr})
+// }
 
 module.exports = { uploadImage, uploadPDF }
