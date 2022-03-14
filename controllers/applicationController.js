@@ -26,7 +26,9 @@ const createApplication = async (req, res) => {
     userId: userProfile._id,
   })
   if (application) {
-    throw new CustomError.BadRequestError('Already created job with this account')
+    throw new CustomError.BadRequestError(
+      'Already created job with this account'
+    )
   }
   await Application.create({
     userId: userProfile._id,
@@ -84,9 +86,26 @@ const getApplicationById = async (req, res) => {
 
 const getAllCurrentApplication = async (req, res) => {
   const { userId } = req.user
+  const newArr = []
   const userProfile = await UserProfile.findOne({ userId })
   const application = await Application.find({ userId: userProfile._id })
-  res.status(StatusCodes.OK).json({ application })
+  for (let data in application) {
+    const companyProfile = await CompanyProfile.findOne({
+      _id: application[data].companyId,
+    })
+    const announce = await Announcement.findOne({
+      _id: application[data].announceId,
+    })
+    const myData = {
+      announceId: announce._id,
+      companyName: companyProfile.companyName,
+      position: announce.position,
+      updatedAt: application.updatedAt,
+      createdAt: application.createdAt,
+    }
+    newArr.push(myData)
+  }
+  res.status(StatusCodes.OK).json({ data: newArr })
 }
 module.exports = {
   createApplication,
