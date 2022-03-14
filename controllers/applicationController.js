@@ -63,7 +63,10 @@ const getAllApplication = async (req, res) => {
       firstName: candidate.firstName,
       lastName: candidate.lastName,
       email: candidate.email,
+      phone: candidate.phone,
       position: announce.position,
+      createdAt: application[data].createdAt,
+      updatedAt: application[data].updatedAt,
     }
     myArr.push(myData)
   }
