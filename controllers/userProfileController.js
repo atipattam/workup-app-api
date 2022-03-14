@@ -29,7 +29,7 @@ const getUserByEmail = async (req, res) => {
     if (!profileData) {
       throw new CustomError.BadRequestError('Not found with this account')
     }
-    data = {imgProfile: profileData.imgProfile, name: profileData.firstName}
+    data = { imgProfile: profileData.imgProfile, name: profileData.firstName }
   }
 
   if (role === 'company') {
@@ -42,9 +42,7 @@ const getUserByEmail = async (req, res) => {
   if (!data) {
     throw new CustomError.BadRequestError('Not found with this account')
   }
-  res
-    .status(StatusCodes.OK)
-    .json({ msg: 'Get complete', data})
+  res.status(StatusCodes.OK).json({ msg: 'Get complete', data })
 }
 const updateUserProfile = async (req, res) => {
   const { userId } = req.user
@@ -66,8 +64,9 @@ const updateUserProfile = async (req, res) => {
     city: 'string',
     responsible: 'string',
     phone: 'string',
-    aboutMe:'string',
-    }
+    aboutMe: 'string',
+    experience: 'array',
+  }
   const check = checkTypeBody(allData, schema)
   if (!check) {
     throw new CustomError.BadRequestError('something wrong')

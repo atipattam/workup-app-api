@@ -95,10 +95,11 @@ const verifyEmail = async (req, res) => {
       gender: '',
       marital: '',
       emailAuth: email,
-      phone:'',
-      responsible:'',
-      aboutMe:'',
-      city:'',
+      phone: '',
+      responsible: '',
+      aboutMe: '',
+      city: '',
+      experience: [{}],
     })
   }
   if (role === 'company') {
@@ -115,7 +116,7 @@ const verifyEmail = async (req, res) => {
       phoneNumber: '',
       detail: '',
       travel: [],
-      imgCover:''
+      imgCover: '',
     })
   }
   res.status(StatusCodes.OK).json({ msg: 'Email Verified' })

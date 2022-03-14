@@ -50,18 +50,21 @@ const ProfileSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
-  phone:{
-    type: String
+  phone: {
+    type: String,
   },
-  aboutMe:{
-    type: String
+  aboutMe: {
+    type: String,
   },
-  responsible:{
-    type:String
+  responsible: {
+    type: String,
   },
-  city:{
-    type:String
-  }
+  city: {
+    type: String,
+  },
+  experience: {
+    type: [],
+  },
 })
 
 module.exports = mongoose.model('UserProfile', ProfileSchema)
