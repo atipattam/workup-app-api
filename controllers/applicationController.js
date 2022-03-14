@@ -99,6 +99,7 @@ const getAllCurrentApplication = async (req, res) => {
     const myData = {
       announceId: announce._id,
       companyName: companyProfile.companyName,
+      companyImg: companyProfile.imgProfile,
       position: announce.position,
       updatedAt: application[data].updatedAt,
       createdAt: application[data].createdAt,
