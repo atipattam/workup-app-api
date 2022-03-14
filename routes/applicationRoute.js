@@ -12,7 +12,7 @@ const {
 
 router
   .route('/candidate')
-  .post(
+  .get(
     [authenticateUser, authorizeRoles('candidate')],
     getAllCurrentApplication
   )
