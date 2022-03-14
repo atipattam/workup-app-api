@@ -100,8 +100,8 @@ const getAllCurrentApplication = async (req, res) => {
       announceId: announce._id,
       companyName: companyProfile.companyName,
       position: announce.position,
-      updatedAt: application.updatedAt,
-      createdAt: application.createdAt,
+      updatedAt: application[data].updatedAt,
+      createdAt: application[data].createdAt,
     }
     newArr.push(myData)
   }
