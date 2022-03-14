@@ -3,7 +3,7 @@ const validator = require('validator')
 
 const AnnouncementSchema = new mongoose.Schema(
   {
-    companyId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
+    companyId: { type: mongoose.Types.ObjectId, ref: 'CompanyProfile', required: true },
     jobType: { type: String },
     position: { type: String },
     positionTotal: { type: Number },
