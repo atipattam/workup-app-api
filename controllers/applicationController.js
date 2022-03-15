@@ -46,7 +46,10 @@ const getAllApplication = async (req, res) => {
   if (!profile) {
     throw new CustomError.BadRequestError('Not found')
   }
-  const application = await Application.find({ companyId: profile._id })
+  const application = await Application.find({
+    companyId: profile._id,
+    isActive: true,
+  })
   if (_isEmpty(application)) {
     throw new CustomError.BadRequestError('Empty Application')
   }
