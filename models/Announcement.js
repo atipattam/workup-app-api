@@ -12,6 +12,8 @@ const AnnouncementSchema = new mongoose.Schema(
     location: { type: String },
     property: { type: [] },
     interview: { type: String },
+    isActive: {type : Boolean},
+    status:{type: String},
   },
   { timestamps: true }
 )

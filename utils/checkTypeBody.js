@@ -3,9 +3,16 @@ const _isArray = require('lodash/isArray')
 const _isEmpty = require('lodash/isEmpty')
 const _join = require('lodash/join')
 const _xor = require('lodash/xor')
+const _filter = require('lodash/filter')
 const CustomError = require('../errors')
 const checkTypeBody = (data, type) => {
   const arr = Object.keys(data)
+  const typeArr = Object.keys(type)
+  const diff = _filter(arr, (data) => !typeArr.includes(data))
+  if (!_isEmpty(diff)) {
+    const message = _join(diff, 'is false format , ')
+    throw new CustomError.BadRequestError(message)
+  }
   const messageArr = []
   arr.forEach((field, i) => {
     if (
@@ -23,7 +30,6 @@ const checkTypeBody = (data, type) => {
 
   if (!_isEmpty(messageArr)) {
     const message = _join(messageArr, ', ')
-    console.log(messageArr, '23')
     throw new CustomError.BadRequestError(message)
   }
   return true

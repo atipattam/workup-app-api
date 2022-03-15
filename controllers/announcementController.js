@@ -1,4 +1,5 @@
 const { checkTypeBody, requireData } = require('../utils/checkTypeBody')
+const Application = require('../models/Application')
 const Announce = require('../models/Announcement')
 const CompanyProfile = require('../models/CompanyProfile')
 const CustomError = require('../errors')
@@ -13,6 +14,7 @@ const schema = {
   location: 'string',
   property: 'array',
   interview: 'string',
+  isActive: 'boolean',
 }
 
 const createAnnouncement = async (req, res) => {
@@ -71,8 +73,37 @@ const getAnnounceById = async (req, res) => {
     },
   })
 }
+const updateAnnouncement = async (req, res) => {
+  const { userId } = req.user
+  const allData = req.body
+  const announceId = req.params.id
+  const companyProfile = await CompanyProfile.findOne({ userId })
+  const announce = await Announce.findOne({
+    _id: announceId,
+    companyId: companyProfile._id,
+  })
+  if (_isEmpty(allData)) {
+    throw new CustomError.BadRequestError('Please send data')
+  }
+  // console.log(companyProfile._id, announce.companyId, 'hello')
+  if (_isEmpty(announce)) {
+    throw new CustomError.BadRequestError(
+      'This announce can update with own company'
+    )
+  }
+  checkTypeBody(allData, schema)
+  await Announce.updateOne({ _id: announceId }, allData)
+  await Application.updateMany(
+    { companyId: companyProfile._id, announceId: announce._id },
+    { isActive: false }
+  )
+  res.status(StatusCodes.OK).json({
+    msg: 'update success',
+  })
+}
 module.exports = {
   createAnnouncement,
   getAllAnnouncementCompany,
   getAnnounceById,
+  updateAnnouncement,
 }

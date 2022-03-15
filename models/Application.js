@@ -18,6 +18,9 @@ const ApplicationSchema = new mongoose.Schema(
       required: true,
     },
     other: { type: [] },
+    isActive: {
+      type:Boolean
+    }
   },
   { timestamps: true }
 )
