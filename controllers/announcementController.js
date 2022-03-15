@@ -27,7 +27,11 @@ const createAnnouncement = async (req, res) => {
   if (!check) {
     throw new CustomError.BadRequestError('Something Wrong')
   }
-  await Announce.create({ companyId: companyProfile._id, ...allData })
+  await Announce.create({
+    companyId: companyProfile._id,
+    ...allData,
+    isActive: true,
+  })
   res.status(StatusCodes.CREATED).json({
     msg: 'Create Announcement Success',
   })

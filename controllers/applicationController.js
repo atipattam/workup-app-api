@@ -35,6 +35,7 @@ const createApplication = async (req, res) => {
     companyId: announce.companyId,
     announceId: announce._id,
     other: allData,
+    isActive: true,
   })
   res.status(StatusCodes.OK).json({ msg: 'Application done' })
 }
