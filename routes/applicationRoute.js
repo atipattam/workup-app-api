@@ -8,6 +8,7 @@ const {
   getAllApplication,
   getApplicationById,
   getAllCurrentApplication,
+  deleteApplication,
 } = require('../controllers/applicationController')
 
 router
@@ -19,6 +20,7 @@ router
 router
   .route('/candidate/:id')
   .post([authenticateUser, authorizeRoles('candidate')], createApplication)
+  .delete([authenticateUser, authorizeRoles('candidate')], deleteApplication)
 router
   .route('/company')
   .get([authenticateUser, authorizeRoles('company')], getAllApplication)

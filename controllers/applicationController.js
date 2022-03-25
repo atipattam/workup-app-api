@@ -36,6 +36,8 @@ const createApplication = async (req, res) => {
     announceId: announce._id,
     other: allData,
     isActive: true,
+    isUpdate: false,
+    isDelete: false,
   })
   res.status(StatusCodes.OK).json({ msg: 'Application done' })
 }
@@ -115,9 +117,24 @@ const getAllCurrentApplication = async (req, res) => {
   }
   res.status(StatusCodes.OK).json({ data: newArr })
 }
+const deleteApplication = async (req, res) => {
+  const { userId } = req.user
+  const applicationId = req.params.id
+  const user = await UserProfile.findOne({ userId })
+  const application = await Application.findOne({
+    userId: user._id,
+    _id: applicationId,
+  })
+  if (!application) {
+    throw new CustomError.BadRequestError('Cannnot delete this application')
+  }
+  await Application.deleteOne({ _id: applicationId })
+  res.status(StatusCodes.OK).json({ msg: 'delete Success' })
+}
 module.exports = {
   createApplication,
   getAllApplication,
   getApplicationById,
   getAllCurrentApplication,
+  deleteApplication
 }

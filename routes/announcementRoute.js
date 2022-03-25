@@ -8,6 +8,7 @@ const {
   getAllAnnouncementCompany,
   getAnnounceById,
   updateAnnouncement,
+  deleteAnnouncement,
 } = require('../controllers/announcementController')
 
 router
@@ -21,6 +22,9 @@ router.get(
 )
 router.get('/:id', getAnnounceById)
 
-router.route('/company/:id').patch([authenticateUser, authorizeRoles('company')],updateAnnouncement)
+router
+  .route('/company/:id')
+  .patch([authenticateUser, authorizeRoles('company')], updateAnnouncement)
+  .delete([authenticateUser, authorizeRoles('company')], deleteAnnouncement)
 
 module.exports = router

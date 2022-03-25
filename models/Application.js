@@ -20,6 +20,12 @@ const ApplicationSchema = new mongoose.Schema(
     other: { type: [] },
     isActive: {
       type:Boolean
+    },
+    isUpdate : {
+      type: Boolean
+    },
+    isDelete : {
+      type: Boolean,
     }
   },
   { timestamps: true }

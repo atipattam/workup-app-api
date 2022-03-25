@@ -99,10 +99,30 @@ const updateAnnouncement = async (req, res) => {
   await Announce.updateOne({ _id: announceId }, allData)
   await Application.updateMany(
     { companyId: companyProfile._id, announceId: announce._id },
-    { isActive: false }
+    { isActive: false, isUpdate: true, isDelete: false }
   )
   res.status(StatusCodes.OK).json({
     msg: 'update success',
+  })
+}
+const deleteAnnouncement = async (req, res) => {
+  const { userId } = req.user
+  const announceId = req.params.id
+  const company = await CompanyProfile.findOne({ userId })
+  const announce = await Announce.findOne({
+    companyId: company._id,
+    _id: announceId,
+  })
+  if (!announce) {
+    throw new CustomError.BadRequestError('Announce can not delete')
+  }
+  await Announce.deleteOne({ _id: announceId })
+  await Application.updateMany(
+    { companyId: company._id, announceId: announce._id },
+    { isActive: false, isUpdate: false, isDelete: true }
+  )
+  res.status(StatusCodes.OK).json({
+    msg: 'delete success',
   })
 }
 module.exports = {
@@ -110,4 +130,5 @@ module.exports = {
   getAllAnnouncementCompany,
   getAnnounceById,
   updateAnnouncement,
+  deleteAnnouncement,
 }
