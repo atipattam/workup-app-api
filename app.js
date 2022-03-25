@@ -43,7 +43,12 @@ app.set('trust proxy', 1)
 //   })
 // )
 
-app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }))
+app.use(
+  cors({
+    credentials: true,
+    origin: ['http://localhost:3000', 'https://workup-app-react.vercel.app'],
+  })
+)
 // credentials: true,
 // allowedHeaders: ['Content-Type', 'Authorization'],
 // origin: ['http://localhost:3000'],
