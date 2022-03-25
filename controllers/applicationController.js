@@ -109,7 +109,7 @@ const updateStatusApplicationId = async (req, res) => {
     _id: applicationId,
     companyId: company._id,
   })
-  
+
   if (!application) {
     throw new CustomError.BadRequestError('Cannnot Update status')
   }
@@ -131,6 +131,7 @@ const getAllCurrentApplication = async (req, res) => {
     })
     const myData = {
       announceId: announce._id,
+      applicationId: application[data]._id,
       companyName: companyProfile.companyName,
       companyImg: companyProfile.imgProfile,
       position: announce.position,
