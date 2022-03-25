@@ -38,6 +38,7 @@ const createApplication = async (req, res) => {
     isActive: true,
     isUpdate: false,
     isDelete: false,
+    status: 'pending',
   })
   res.status(StatusCodes.OK).json({ msg: 'Application done' })
 }
@@ -73,6 +74,7 @@ const getAllApplication = async (req, res) => {
       position: announce.position,
       createdAt: application[data].createdAt,
       updatedAt: application[data].updatedAt,
+      status: application[data].status
     }
     myArr.push(myData)
   }
@@ -85,6 +87,7 @@ const getApplicationById = async (req, res) => {
   const userProfile = await UserProfile.findOne({ _id: application.userId })
   const data = {
     applicationId: application._id,
+    status: application.status,
     createdAt: application.createdAt,
     updateAt: application.updatedAt,
     userProfile,
@@ -112,6 +115,7 @@ const getAllCurrentApplication = async (req, res) => {
       position: announce.position,
       updatedAt: application[data].updatedAt,
       createdAt: application[data].createdAt,
+      status: application[data].status,
     }
     newArr.push(myData)
   }

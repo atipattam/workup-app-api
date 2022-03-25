@@ -26,6 +26,10 @@ const ApplicationSchema = new mongoose.Schema(
     },
     isDelete : {
       type: Boolean,
+    },
+    status:{
+      type: String,
+      enum:['pending','disapproved','callback']
     }
   },
   { timestamps: true }
