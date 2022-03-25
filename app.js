@@ -31,27 +31,13 @@ const notFoundMiddleware = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 app.set('trust proxy', 1)
 
-// app.use(
-//   session({
-//     secret: 'supersecret',
-//     saveUninitialized: true,
-//     cookie: {
-//       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
-//       secure: process.env.NODE_ENV === 'production', // must be true if sameSite='none'
-//     },
-//     resave: false,
-//   })
-// )
-
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000', 'https://workup-app-react.vercel.app'],
+    origin: [process.env.MYPORT, process.env.CLIENT_URL],
   })
 )
-// credentials: true,
-// allowedHeaders: ['Content-Type', 'Authorization'],
-// origin: ['http://localhost:3000'],
+
 
 app.use(express.json())
 app.use(fileUpload({ useTempFiles: true }))
