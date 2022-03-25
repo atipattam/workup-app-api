@@ -9,6 +9,7 @@ const {
   getApplicationById,
   getAllCurrentApplication,
   deleteApplication,
+  updateStatusApplicationId,
 } = require('../controllers/applicationController')
 
 router
@@ -28,4 +29,8 @@ router
 router
   .route('/company/:id')
   .get([authenticateUser, authorizeRoles('company')], getApplicationById)
+  .patch(
+    [authenticateUser, authorizeRoles('company')],
+    updateStatusApplicationId
+  )
 module.exports = router

@@ -74,7 +74,7 @@ const getAllApplication = async (req, res) => {
       position: announce.position,
       createdAt: application[data].createdAt,
       updatedAt: application[data].updatedAt,
-      status: application[data].status
+      status: application[data].status,
     }
     myArr.push(myData)
   }
@@ -94,6 +94,27 @@ const getApplicationById = async (req, res) => {
     other: application.other,
   }
   res.status(StatusCodes.OK).json({ data })
+}
+
+const updateStatusApplicationId = async (req, res) => {
+  const { userId } = req.user
+  const applicationId = req.params.id
+  const { status } = req.body
+  if (!status) {
+    throw new CustomError.BadRequestError('Please send status')
+  }
+
+  const company = await CompanyProfile.findOne({ userId })
+  const application = await Application.findOne({
+    _id: applicationId,
+    companyId: company._id,
+  })
+  
+  if (!application) {
+    throw new CustomError.BadRequestError('Cannnot Update status')
+  }
+  await Application.updateOne({ _id: applicationId }, { status })
+  res.status(StatusCodes.OK).json({ msg: `Update status to ${status}` })
 }
 
 const getAllCurrentApplication = async (req, res) => {
@@ -140,5 +161,6 @@ module.exports = {
   getAllApplication,
   getApplicationById,
   getAllCurrentApplication,
-  deleteApplication
+  deleteApplication,
+  updateStatusApplicationId,
 }
