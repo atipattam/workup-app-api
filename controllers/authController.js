@@ -244,6 +244,24 @@ const resetPassword = async (req, res) => {
   res.send('reset password')
 }
 
+const updatePassword = async (req, res) => {
+  const { userId } = req.user
+  const { oldPassword, newPassword } = req.body
+  if (!oldPassword || !newPassword || oldPassword === newPassword) {
+    throw new CustomError.BadRequestError(
+      'Please provide old password & new password diffrently'
+    )
+  }
+  const user = await User.findOne({ _id: userId })
+
+  const isPasswordCorrect = await user.comparePassword(oldPassword)
+  if (!isPasswordCorrect) {
+    throw new CustomError.UnauthenticatedError('wrong old password')
+  }
+  user.password = newPassword
+  await user.save()
+  res.status(StatusCodes.OK).json({ msg: 'Update password complete' })
+}
 module.exports = {
   register,
   login,
@@ -252,4 +270,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   checkLogin,
+  updatePassword,
 }
