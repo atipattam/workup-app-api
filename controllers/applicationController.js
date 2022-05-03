@@ -148,6 +148,7 @@ const getAllCurrentApplication = async (req, res) => {
   }
   res.status(StatusCodes.OK).json({ data: newArr })
 }
+
 const deleteApplication = async (req, res) => {
   const { userId } = req.user
   const applicationId = req.params.id
