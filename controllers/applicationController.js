@@ -53,7 +53,6 @@ const getAllApplication = async (req, res) => {
   const application = await Application.find({
     companyId: profile._id,
     isActive: true,
-    isDelete: false,
   })
   if (_isEmpty(application)) {
     throw new CustomError.BadRequestError('Empty Application')
@@ -123,8 +122,10 @@ const getAllCurrentApplication = async (req, res) => {
   const newArr = []
   const userProfile = await UserProfile.findOne({ userId })
   console.log(userProfile, 'userProfile')
-  const application = await Application.find({ userId: userProfile._id })
-  console.log(application, 'application')
+  const application = await Application.find({
+    userId: userProfile._id,
+    isDelete: false,
+  })
   for (let data in application) {
     const companyProfile = await CompanyProfile.findOne({
       _id: application[data].companyId,
